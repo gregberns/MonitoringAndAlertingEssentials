@@ -12,6 +12,18 @@ KISS - Keep it stupid simple
 
 There are a million things you *could* monitor. Start with the most simple thing you can think of. Then iterate. Use [Postmortems](SiteReliabilityEngineeringBook.md#postmortem-culture-learning-from-failure) to help drive monitoring/alterting improvements.
 
+## Improvement Cycle
+
+Developing a continuous improvement process is important.
+
+* Add monitoring
+* Watch/Analyze
+* On Failure:
+* Document incident
+* Root Cause Analisys
+* Create strategy to prevent future issues
+* Repeat
+
 ## How to Start Monitoring
 
 Steps:
