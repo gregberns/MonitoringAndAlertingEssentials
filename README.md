@@ -6,22 +6,27 @@ The following is an introductory guide to understand the basics of improving sys
 
 Understanding when your systems are actively having issues is one of the first steps in improving their reliability. Once you can detect a system is having issues, you can actively improve the reliability of that system and prevent further issues from occuring.
 
-## Getting Started
+## When Getting Started
 
 KISS - Keep it stupid simple
 
-There are a million things you *could* monitor. Start with the most simple thing you can think of. Then iterate. Use [Postmortems](SiteReliabilityEngineeringBook.md#postmortem-culture-learning-from-failure) to help drive monitoring/alterting improvements.
+There are a million things you *could* monitor. Start with the most simple thing you can think of. Then iterate. 
+
+Using Error counts can be one of the easiest metrics to start monitoring.
+
+Use [Postmortems](SiteReliabilityEngineeringBook.md#postmortem-culture-learning-from-failure) to help drive monitoring/alterting improvements.
 
 ## Improvement Cycle
 
-Developing a continuous improvement process is important.
+The objective isn't to monitor for monitoring's sake, its to improve the health and reliability of your system through  continuous, incremental improvement.
+
+This can be accomplished by a series of small steps repeated over and over:
 
 * Add monitoring
 * Watch/Analyze
 * On Failure:
-* Document incident
-* Root Cause Analisys
-* Create strategy to prevent future issues
+* Write postmortem document and understand the root cause
+* Implement one or two small changes to either prevent future issues or detect them earlier
 * Repeat
 
 ## How to Start Monitoring
