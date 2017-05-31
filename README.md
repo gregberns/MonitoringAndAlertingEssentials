@@ -1,16 +1,22 @@
 # Monitoring And Alerting Essentials
 
+The following is an introductory guide to understand the basics of improving system reliability through active monitoring and alerting, and a process of continuous improvement.
+
+Understanding when your systems are actively having issues is one of the first steps in improving their reliability. 
+
+
+
 ## Site Reliability Engineering Book
 
-A majority of the topics in this talk are based (read 'stolen') on the book [Site Reliability Engineering](https://landing.google.com/sre/book.html), written by Google's Site Reliability Engineers (SRE). SRE's are responsible for ensuring Google's services are reliable and when there are issues, they ensure there are measures put into place to prevent future issues.
+A majority of the topics below are based (read 'stolen') on the book [Site Reliability Engineering](https://landing.google.com/sre/book.html), written by Google's Site Reliability Engineers (SRE). SRE's are responsible for ensuring Google's services are reliable and when there are issues, they ensure there are measures put into place to prevent future issues.
 
 The great thing about this book is that the book is broken down into bite sized chapters and each can be read independently of the others. After reading the [Introduction](https://landing.google.com/sre/book/chapters/introduction.html), feel free to skip around and read chapters of interest to you.
 
 *Suggested Chapters*
 
 * [Eliminating Toil](https://landing.google.com/sre/book/chapters/eliminating-toil.html) - Start small and eliminate pain one  place at a time. A little action goes a long way.
-*[Monitoring Distributed Systems](https://landing.google.com/sre/book/chapters/monitoring-distributed-systems.html) - Monitoring and alerting enables a system to tell us when it’s broken. 
-
+* [Monitoring Distributed Systems](https://landing.google.com/sre/book/chapters/monitoring-distributed-systems.html) - Monitoring and alerting enables a system to tell us when it’s broken. 
+* [Postmortem Culture: Learning from Failure](https://landing.google.com/sre/book/chapters/postmortem-culture.html) - A blameless postmortem process helps identify areas for improvement
 
 
 ### Monitoring Distributed Systems
@@ -47,4 +53,15 @@ KISS - Keep it stupid simple
 
 There are a million things you *could* monitor. Start with the most simple thing you can think of. Then iterate. Use Post Mortems to help drive monitoring/alterting improvements.
 
+
+### Postmortem Culture: Learning from Failure
+
+> "Always learn from your mistakes"
+>  -- Your Mother
+
+Having a blameless post mortem after system incidents
+
+This process helps weather fewer outages and fosters a better user experience.
+
+Example [When to Conduct A Postmortem](WhenToConductAPostmortem.md) document.
 
