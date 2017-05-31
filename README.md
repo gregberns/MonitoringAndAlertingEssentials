@@ -34,12 +34,28 @@ A system contains three parts:
 
 Read [The Four Golden Signals](SiteReliabilityEngineeringBook.md#the-four-golden-signals) to understand why the following recommendations are made.
 
+##### Phase 1
+
+The two most critical places to monitor are:
+
+* Client-side Errors - If an error is returned or timeout occurs, this should be logged and passed onto the monitoring service.
+* Server-side Errors - Any errors that are returned to clients should be tracked. This will catch improperly made requests, depenancy issues (i.e. database errors), and internal code exceptions (read: bugs).
+
+What kind of insight can be gained?
+* DB Errors - If the server's error count spikes, it signals a database issue because the database is the most vulnerable system dependency.
+* Connection Issues - if server-side volume dips and client side errors spike, it signals an inability of clients to connect with the server
+* Clients making invalid requests - Invalid requests can be passed onto the client developers to prevent future issues.
+
+
+
+##### Phase 2
+
+Do not rush into phase 2. Spending time fixing issues found from Phase 1, can pay big dividends. You may even find that phase 2 is unnecessary.
+
 * Client - The client may make one or more calls to the supporting service. Logging/metrics should be added to each of the calls made to the service. Two things should be captured, but the first is most important:
-    * Errors - If an error is returned or timeout occurs, this should be logged and passed onto the monitoring service.
     * Latency - Each call should track the time it takes for a request to be made. That latency should be tracked including the endpoint that the request was made to
 
 * Server - Monitoring can be added in this prority
-    * Errors emitted from API - Any errors that are returned to clients should be tracked. 
     * Latancy of calls to API - How log does it take for the service to process requests? Errors latency should be tracked with a separate from success latency.
     * Errors emited from the database - database errors can be caught by the API in the first iteration, but it will be helpful to know what DB calls are failing 
     * Latency of database calls - 
