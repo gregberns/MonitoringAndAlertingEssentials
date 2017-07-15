@@ -2,7 +2,15 @@
 
 ** This document currently in progress **
 
-The following is an introductory guide to understand the basics of improving system reliability through active monitoring and alerting, and a process of continuous improvement.
+The following is an introductory guide to understand the basics of improving system reliability through active logging, monitoring, and alerting, and a process of continuous improvement.
+
+## What problems are we trying to solve
+
+There are several problems that a developer needs to solve:
+
+* Understand what a system has done 
+* Have visibility into what a system is doing
+* 
 
 Understanding when your systems are actively having issues is one of the first steps in improving their reliability. Once you can detect a system is having issues, you can actively improve the reliability of that system and prevent further issues from occuring.
 

@@ -1,62 +1,113 @@
 # Monitoring Talk 
 
+* Discuss why you should care
 * Discuss what logging, metrics, monitoring and alerting is.
 * Discuss options for each topic
 * Discuss Pros and cons within these options
 * Discuss technologies that support these things
 
-### Objectives
+### Talk Objectives
 
 An attempt to persuade you that you WANT to know what is happening in your system, and how to get that information out of the system, or make the system tell you there is an issue.
 
+I'd like to pursuade you that you WANT to:
+
+* Identify - Proactively identify outages and issues
+* Prevent - Limit impact of issues
+* Improve - Increase the resilience and robustness of systems
+
+### These Ideas 
+
+Are not mine.... 
+
+These are the best two sources I've found:
+
+* Prometheus documentation - a metrics, monitoring, and alerting open source tool set
+    * has great documentation on what's required of a metrics and monitoring system
+* Site Reliability Engineering - an open source book wrote by Site Reliability Engineers (SREs) at Google
+    *  SREs are responsible for keeping Google services up and running
+
 ### Why would you want to do this? 
 
-Story: 
-* 'Customer' walks up and says: The X site isn’t responding. (First question is: why didn’t you know it wasn’t responding?)
-* You then spend a couple minutes in utter disbelief making excuses: “It can’t be us!”
-* You spend half an hour trying to dig into the logs to figure out what might be going on.
-* You make recomendation on who is to blame
+Story:
+
+* 'Customer' walks up and says: The X site isn’t responding. (First question is: why didn’t you know there was an issue in the first place???)
+* Then spend a couple minutes in utter disbelief making excuses: “It can’t be us!”, "Its working fine for me!" (Image blaming, or one thing is working while the rest is broken)
+* Spend half an hour trying to dig into the logs to figure out what might be going on. (Image of a dog digging with label of 30 minutes)
+* Make a recomendation on who is to blame (Image of everyone blaming everyone else)
 
 Lets prevent this. 
 
-Lets be good engineers and proactively notify our customers, so they don’t don’t have to notify us. 
+Lets be good engineers. 
 
-### Visibility into the system:
+Lets:
 
-* Logs - Show you details of WHAT happened
-* Metrics - Show you that something IS happening
-* Monitoring - Lets you SEE something is happening
-* Alerting - Lets you know something IS happening
+* Proactively notify our customers
+* Know when our systems are having problems
+* Make strategically make improvements after failure
 
-### Why:
+### So... what problems need solving
 
-Its terrible to get interrupted when someone says 'Its not working'. 'Whats not working!' you respond.
+We need:
 
-I’m no expert in logging, metrics, monitoring and alerting, but limiting the impact of system failures is huge and it makes our systems more robust and resilient.
+* Notification of outage and latency
+* Diagnose where issues are arising
+* Context on what's happening and why
 
-### Ideas 
+### Visibility into the system
 
-* Prometheus documentation, a metrics, monitoring and alerting open source tool set
-* Site Reliability Engineering - an open source book wrote by Site Reliability Engineers (SREs) at Google, responsible for keeping Google services up and running 
+What tools do we have in our tool belt? (Image: X-ray vision)
 
-### Principle
+There are several distinct *tools* or concepts we need to leverage. 
+
+Many of the available technologies blur the lines, so its important to understand the distinctions between them so we can make better architectural decisions.
+
+Lets work our way backwards:
+
+* Need to recieve a notification something has occured
+    * Alerting - Know *that* something has occured (Email, Phone call, etc) 
+    (Image of Woof from the Office)
+
+* Something needs to kick off the Alert, need to detect *when* something goes wrong
+    * Monitoring - a threshold has been breached. Constant recalculations to check for threshold breach
+    
+* Need 'numbers' to calculate threshold with
+    * Metrics - impartial tracker of things... aggregates the *who* and *where*
+    
+* Once area is identified as a problem area, how do we determine a cause?
+    * Logs - Show you details of *what* happened, hopefully a *why* can be inferred
+
+### Pyramid of Data Volume
+
+top is alerts - a couple a day
+next is monitoring calculations - 
+next is metrics and logs, but logs are separate and very large
+
+### STOP
+
+Don't be intimidated....
 
 > KISS - Keep it stupid simple
 
-Don't try and do everything at once. Take it one step at a time and make small iterative improvements.
+Don't try and do everything at once. 
+Take it one step at a time and make small iterative improvements.
 
-### Theorietical System
+## Concepts
 
-Create ‘theoretical system’ that has multiple nodes that need to be monitored. How do we do logging, monitoring and alerting on that system?
+* Logging
+* Metrics
+* Monitoring
+* Alerting
 
-```
-            API ->
-UI1, UI2 -> API -> API -> DB
-UI3      -> API ->     -> API
-```
 
-One day, UI1 and UI2 report serious latency issues. How do we figure out whats going on?
-Add logging in the core and at the seams
+* Alerting - Know *that* something has occured (Email, Phone call, etc) (Image of Woof from the Office)
+* Monitoring - Detect *when* something goes wrong (Calculation based on metrics)
+    * alert is sent *because* of a monitor
+* Metrics - impartial tracker of things... aggregates the *who* and *where*
+    * metrics are used by the monitoring system to do calculations
+* Logs - Show you details of *what* happened, hopefully a *why* can be inferred
+    * metrics help identify where in the logs to look
+
 
 ## Logging
 
@@ -237,6 +288,23 @@ Alerting Technologies
 * OnCall tools (PagerDuty, VictorOps)- Are used specifically to notify ‘on-call’ staff to issues
 * Splunk Queries + Alerts - Will send notifications to email, Slack
 * AppInsights Alerts - Only sends email alerts
+
+
+
+
+
+### Theoretical System
+
+Create ‘theoretical system’ that has multiple nodes that need to be monitored. How do we do logging, monitoring and alerting on that system?
+
+```
+            API ->
+UI1, UI2 -> API -> API -> DB
+UI3      -> API ->     -> API
+```
+
+One day, UI1 and UI2 report serious latency issues. How do we figure out whats going on?
+Add logging in the core and at the seams
 
 
 
