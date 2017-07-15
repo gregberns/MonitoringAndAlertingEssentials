@@ -4,6 +4,11 @@
 
 The following is an introductory guide to understand the basics of improving system reliability through active logging, monitoring, and alerting, and a process of continuous improvement.
 
+The majority of the ideas in this repo have been 'taken nicely' (stolen with reverence) from the places where I learned them:
+* [Google Site Reliability Engineering book] (https://landing.google.com/sre/book.html)
+* [Prometheus documentation](https://prometheus.io/docs/introduction/overview/)
+    * There is a great [ChangeLog](https://changelog.com/podcast/168) podcast where the creator of Prometheus discusses why the tool was built
+
 ## What problems are we trying to solve
 
 There are several problems that a developer needs to solve:
