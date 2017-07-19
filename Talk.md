@@ -1,33 +1,41 @@
-# Monitoring Talk 
+# Shedding Light on Black Box Services
 
-* Discuss why you should care
-* Discuss what logging, metrics, monitoring and alerting is.
-* Discuss options for each topic
-* Discuss Pros and cons within these options
-* Discuss technologies that support these things
+## Overview
 
-### Talk Objectives
+Will discuss
 
-An attempt to persuade you that you WANT to know what is happening in your system, and how to get that information out of the system, or make the system tell you there is an issue.
+* Why you should care about logging, metrics, monitoring, and alerting
+* What each of these concepts are
+* Methodologies for each concept
+* Pros and cons within each mentodology
+* Technologies that support these concepts
 
-I'd like to pursuade you that you WANT to:
+## Talk Objectives
+
+Pursuade you that you WANT to:
 
 * Identify - Proactively identify outages and issues
-* Prevent - Limit impact of issues
+* Prevent - Limit/eliminate impact of issues
 * Improve - Increase the resilience and robustness of systems
 
-### These Ideas 
+In other words, you WANT to know:
+
+* what is happening in your system
+* be able to get that information from your system
+* make the system tell you when there is an issue
+
+## These Ideas 
 
 Are not mine.... 
 
 These are the best two sources I've found:
 
 * Prometheus documentation - a metrics, monitoring, and alerting open source tool set
-    * has great documentation on what's required of a metrics and monitoring system
+    * has great, 'easy for beginners' documentation on what's required of a metrics and monitoring system
 * Site Reliability Engineering - an open source book wrote by Site Reliability Engineers (SREs) at Google
-    *  SREs are responsible for keeping Google services up and running
+    *  SREs are responsible for keeping Google services up and running. Uber also has a similar team.
 
-### Why would you want to do this? 
+## Why would you want to do this? 
 
 Story:
 
@@ -40,27 +48,21 @@ Lets prevent this.
 
 Lets be good engineers. 
 
-Lets:
+In this example:
 
-* Proactively notify our customers
-* Know when our systems are having problems
-* Make strategically make improvements after failure
+* Lets proactively notify our customers of issues
+* Be notified of issues before customers report them
+* Identify problem areas quickly
+* Dig into causes quickly
+* Strategically make improvements after failure
 
-### So... what problems need solving
+## Methodologies 
 
-We need:
-
-* Notification of outage and latency
-* Diagnose where issues are arising
-* Context on what's happening and why
-
-### Visibility into the system
-
-What tools do we have in our tool belt? (Image: X-ray vision)
-
-There are several distinct *tools* or concepts we need to leverage. 
+Start with well known concepts or methodologies. Then identify technologies.
 
 Many of the available technologies blur the lines, so its important to understand the distinctions between them so we can make better architectural decisions.
+
+## Concepts
 
 Lets work our way backwards:
 
@@ -77,37 +79,23 @@ Lets work our way backwards:
 * Once area is identified as a problem area, how do we determine a cause?
     * Logs - Show you details of *what* happened, hopefully a *why* can be inferred
 
-### Pyramid of Data Volume
-
-top is alerts - a couple a day
-next is monitoring calculations - 
-next is metrics and logs, but logs are separate and very large
-
-### STOP
+## STOP
 
 Don't be intimidated....
 
 > KISS - Keep it stupid simple
 
-Don't try and do everything at once. 
+Don't try and do everything at once.
 Take it one step at a time and make small iterative improvements.
 
 ## Concepts
 
-* Logging
-* Metrics
-* Monitoring
-* Alerting
+Start with the basics, then address the next layer when 
 
-
-* Alerting - Know *that* something has occured (Email, Phone call, etc) (Image of Woof from the Office)
-* Monitoring - Detect *when* something goes wrong (Calculation based on metrics)
-    * alert is sent *because* of a monitor
-* Metrics - impartial tracker of things... aggregates the *who* and *where*
-    * metrics are used by the monitoring system to do calculations
-* Logs - Show you details of *what* happened, hopefully a *why* can be inferred
-    * metrics help identify where in the logs to look
-
+* Logging - add basic logging
+* Metrics - add simple tracking metrics (REDs)
+* Monitoring - create calculations, thresholds that will identify issues
+* Alerting - get notifications when issues are occuring
 
 ## Logging
 
@@ -117,11 +105,11 @@ Understand why failures are occurring in a system
 
 ### What is Logging 
 
-(This may be basic, but it is critical to understand, so you can see the difference soon)
+(This may be basic, but it is critical to understand)
 
 There are two parts: an ‘entry’ and the log itself
 * A log of events or activities that have occurred within the system
-* A Log entry should contain a DateTime of an occurrence, a ‘level' where it occurred, and some data about the event
+* A Log entry should contain a DateTime of an occurrence, a ‘severity level', and some data about the event
 
 For example, an Apache Web Server Log:
 
@@ -133,11 +121,27 @@ For example, an Apache Web Server Log:
 ### What does this get us:
 
 * What was accessed and when and by who
-* How many times was a url accessed (or not)
+* Aggregates can give us how many times was a url accessed (or not)
 
-> Logging gives us the what, where, when and maybe who
+> Logging gives us the what, where, and when
 
-### Log Levels:
+### Purpose
+
+(This will help us make a distinction between logging and metrics)
+
+Gather detailed information about:
+
+* WHEN an event occured
+* WHAT happened when the event occurred (context)
+* WHERE it happened
+
+### Not the Purpose:
+
+* What the system as a whole is doing
+* How much the system is doing
+* High level view of system activity
+
+## Log Levels:
 
 * Trace
 * Information
@@ -151,70 +155,98 @@ For example, an Apache Web Server Log:
 * If theres a bug, in prod, we can add some trace statements and run that code in a ‘prod-like’ environment to understand why the errors are occurring.
 * If you really need to get performance, then you can only capture Errors. Be wary of getting rid of too many levels, when issues do occur they can be difficult to identify
 
-So where could we put logging in to understand our system better:
+## Strategies
 
-### Strategies
-
-* Log to Disk, then potentially have utility move the logs to more permanent location
+* Log to Disk, then have utility move the logs to more permanent location
     * Pros: Reduces network traffic, logs don’t get lost during ‘log service’ outage
-    * Cons: Increase disk IO
-* Log directly to a service, 
+    * Cons: Increase disk IO, need another job to persist
+* Log directly to a service 
     * Pros: Immediate log feedback (great for debugging)
     * Cons: Increased network traffic
 
-### Problems 
+## Production Issues to Consider
 
-* What happens when log service is unavailable?
-* Be cautious of hand rolled HTTP solutions: if remote site is unavailable, the connection timeout will cause a PROD system to grind to a halt. (I’ve seen it, twice, on the same system.)
-* DO NOT BUILD YOUR OWN LOGGING SYSTEM, there are many very good frameworks. They've found all the edge cases and failure paths.
+* Availability - What happens when log service is unavailable?
+* Performance Impact - high volume systems are impacted by heavy logging (disk or network)
+* Be cautious of hand rolled HTTP solutions: if remote site is unavailable, the connection timeout can cause a PROD system to grind to a halt. (I’ve seen it, twice, on the same system.)
+* Industry convention says: "Do not build your own logging library", there are many very good frameworks. They've found all the edge cases and failure paths.
+* Logging system goes down - For example, pushing all logs to a database could overwhelm a database and so overall performance of the system (or other systems using that logging database could be degraded).
 
-### Purpose
+## Technologies:
 
-* Gather detailed information about WHAT our system is doing
-
-### Not the Purpose:
-
-* How much the system is doing
-* High level view of system activity
-
-### Downside to Logging
-
-In a high volume system, if everything your system does is logged the logging can cause performance issues.
-
-For example, pushing all logs to a database could overwhelm a database and so overall performance of the system (or other systems using that logging database could be degraded).
-
-### Technologies:
-
+* Log4Net - derived from very popular Java library
+* System.Diagnostics.Trace - .Net framework
 * GreyLog - streams logs from disk to a log aggregator service
 * Log Database - sends log directly to a database
 * Splunk - send logs directly to a log service
-* Application Insights - has some ‘logging’ capabilities - not recommended for logging though, not its real purpose. (MotionGps tried to use this, but its not really designed for logging)
+* Application Insights - has some ‘logging’ capabilities - not recommended for logging, its the wrong tool.
 
-### Summary:
-What does logging accomplish: Something happened, I need to know what it was, where, and when and some details associated. Example: Error occurred because of X
+## Splunk Log Message Example
 
-## Metrics:
+```
+{
+  "id": "0",
+  "severity": "Information",
+  "data": [
+    {
+      "Source": "Telematics.Jobs.BuzzerJobProxy",
+      "Timestamp": "2017-07-19T21:52:32.2617467Z",
+      "CorrelationId": "e0a4cff0-46ea-41a4-8a4c-24a2032a3614",
+      "Message": "Recieved Event",
+      "Payload": {
+        "Command": "MaxSpeedSet",
+        "DeviceKey": "971916dd-1bd5-4369-a92b-aea71b20116a",
+        "Vin": "3FA6P0H94ER360202"
+      }
+    }
+  ]
+}
+```
 
-### Purpose of metrics:
+## Summary
 
-Identify specific areas where issues are occurring or may occur soon
-High level overview of 'what the system is doing’ (not why)
+What does logging accomplish: 
 
-### What are metrics?
-(Show Telematics Metrics)
-(Contrast with logs, aggregated data vs non aggregated data)
+> Something happened: what was it, where, when, and some **details**.
 
-### Types of metrics:
 
-Counter - Only can go up  - Like the times a URL endpoint has been hit, Errors
-Gauge - Can fluctuate like a speedometer - Requests per second, Average request time
-Histogram - Counts observations and puts them in buckets - Request durations (50 @ < 250ms, 10 @ < 500ms, etc)
 
-Example:
+## Metrics
+
+"Monitor Every Thing!"
+
+## Attributes of Metrics vs Logs
+
+Metrics are:
+
+* Small - in data size, compared to logs
+* Viewed in Aggregate - single log can be valuable, single metric is worthless
+* Structure - simpler, more concise, more structured than a log
+
+## Purpose
+
+Sets of metrics allow you to:
+
+* Help identify problem areas
+* Give high level overview of 'what the system is doing’ (but not why)
+
+## Types of Metrics
+
+* Counter - Only can go up: 1,2,4,10,25 - Like the times a URL endpoint has been hit, or 500s returned
+* Gauge - Fluctuates like a speedometer - Requests per second
+* Histogram - Counts observations and puts them in buckets - Request durations (50 @ < 250ms, 10 @ < 500ms, etc)
+
+Example of a Counter Metric:
+
+```
 api_http_requests_total{method="POST", url="/messages”} count=50
-(Contrast this with Logging information, its nice and compact data)
 
-### Objectives
+        metric name     set of properties(dimensions)    value
+```
+
+(Contrast this with logging information: this is small and compact data)
+
+## Objectives
 
 * Pros
     * Light weight - very little metadata included
@@ -226,7 +258,7 @@ You CAN get metrics from logs, but there are better ways. Remember: Separation o
 Lots of logs prevent scaling up. But metrics just mean a larger ‘int’ value, which is very scalable.
 
 
-### The Four Golden Signals (SRE Book)
+## The Four Golden Signals (SRE Book)
 
 If you can only measure four metrics of your user-facing system, focus on these four:
 
@@ -234,6 +266,19 @@ If you can only measure four metrics of your user-facing system, focus on these 
 * Traffic - A measure of how much demand is being placed on your system.
 * Errors - The rate of requests that fail,
 * Saturation - How "full" your service is. Saturation helps predict impending issues.
+
+## REDs
+
+What to measure in your system?
+
+| | |
+|-|-|
+| **R**equest Rate          | How busy is my service?             |
+| **E**rror Rate            | Are there any errors in my service? |
+| **D**uration of requests  | What is the latency in my service?  |
+
+
+[1] https://www.slideshare.net/weaveworks/monitoring-weave-cloud-with-prometheus
 
 #### Use case #1:
 
@@ -243,18 +288,6 @@ When someone says a service is ‘slow’ you should define what that means:
 
 And if you ‘fix’ it, how do you know its fixed and doesn't degrade later?
 
-### What to Monitor
-
-Monitor ‘symptoms’ not causes:
-* Monitor the response time of a service, not the reason it might be slow. 
-    * You may want to track dependancies(AppInsights does) because SQL Databases can be difficult to monitor
-
-### Problems
-
-Do not build your own metrics engines. 
-* Complex - aggregation and querying is hard
-* Cannot average averages 
-* There are already systems that do this
 
 ### Technologies:
 
@@ -280,31 +313,50 @@ Make sure Alerts aren’t too noisy… otherwise you’ll tire of them and stop 
 
 Monitoring vs Alerting - Short term, get something working. Longer term, think Separation of Concerns.
 
+
+-charts
+
+
+
 Monitoring Technologies
 * Splunk Queries + Alerts - Can alert when Errors increase significantly, but can’t alert on latency
 * AppInsights Alerts - Can create alerts on particular data points, may not be fine grained enough
+
+
+#
+
+
+
 
 Alerting Technologies
 * OnCall tools (PagerDuty, VictorOps)- Are used specifically to notify ‘on-call’ staff to issues
 * Splunk Queries + Alerts - Will send notifications to email, Slack
 * AppInsights Alerts - Only sends email alerts
 
+### What to Monitor
+
+Monitor ‘symptoms’ not causes:
+* Monitor the response time of a service, not the reason it might be slow. 
+    * You may want to track dependancies(AppInsights does) because SQL Databases can be difficult to monitor
 
 
 
 
-### Theoretical System
 
-Create ‘theoretical system’ that has multiple nodes that need to be monitored. How do we do logging, monitoring and alerting on that system?
 
-```
-            API ->
-UI1, UI2 -> API -> API -> DB
-UI3      -> API ->     -> API
-```
 
-One day, UI1 and UI2 report serious latency issues. How do we figure out whats going on?
-Add logging in the core and at the seams
+
+
+
+
+## Show Telematics Archetecture
+
+Where is monitoring
+Where is logging
+Where is Alerting
+
+
+
 
 
 
