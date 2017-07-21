@@ -9,6 +9,10 @@ The majority of the ideas in this repo have been 'taken nicely' (stolen with rev
 * [Prometheus documentation](https://prometheus.io/docs/introduction/overview/)
     * There is a great [ChangeLog](https://changelog.com/podcast/168) podcast where the creator of Prometheus discusses why the tool was built
 
+## Slides for Talk
+
+[Slides for talk.](https://gregberns.github.io/MonitoringAndAlertingEssentials)
+
 ## What problems are we trying to solve
 
 There are several problems that a developer needs to solve:
