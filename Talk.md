@@ -7,14 +7,10 @@
 Will discuss   Logging, Metrics, Monitoring, and Alerting
 
 * Why you should care
-* Understand these concepts better
-* Methodologies for each concept
-* Pros and cons within each methodology
+* Help understand the fundamentals
+* Discuss options of each concept
+* Pros and cons of the options
 * Technologies that support these concepts
-
-???
-
-Methodologies - how to THINK / USE concepts
 
 ---
 
@@ -30,7 +26,7 @@ In other words, your system should tell you:
 
 * when your system has a problem
 * where an issue exists
-* why its occuring
+* why it's occuring
 
 ---
 
@@ -43,7 +39,7 @@ These are the best two sources I've found:
 * **Prometheus documentation** - a metrics, monitoring, and alerting open source tool set
     * great docs to understand metrics basics
 * **Site Reliability Engineering** - an open source book by Googlers
-    * Site Reliability Engineers (SREs) at Google are responsible for:
+    * Site Reliability Engineers (SRE's) at Google are responsible for:
         * Keeping services up and running.
         * Make them more robust
     * (Uber also has a similar team)
@@ -92,7 +88,7 @@ Try to find the issue by digging through logs...
 
 ---
 
-Finally, make a recomendation on the 'cause'
+Finally, make a recommendation on the 'cause'
 
 ![Its not my fault](http://rebootauthentic.com/wp-content/uploads/2013/10/responsibility.png)
 
@@ -106,11 +102,15 @@ Lets use good engineering practices.
 
 # What can we improve
 
-* Lets proactively notify our customers of issues
+* Let's proactively notify our customers of issues
 * Be notified of issues before customers report them
 * Identify problem areas quickly
 * Dig into causes quickly
 * Strategically make improvements after failure
+
+???
+
+What can we do  to improve our systems?
 
 ---
 
@@ -122,19 +122,21 @@ Start with well known concepts or methodologies. Then identify technologies.
 
 The available technologies blur the lines. So we need to understand boundaries of concepts.
 
+???
+
+Talk NOT about Technology, rather have understanding of concepts
+
+
 ---
 
 # Concepts
 
-Start with the problem: Theres an issue, but we didnt know about it.
+Problem: A system was down, but we weren't aware of it.
 
 Lets work our way backwards:
 
----
-
-* Need to recieve a notification
-    * Alerting - Know *that* something has occured (Email, Phone call, etc) 
-     (Image of Woof from the Office)
+* Need to receive a notification
+    * Alerting - Helps us know an issue has occurred (Email, Phone call, etc) 
 
 * Alert trigger: need to detect *when* something goes wrong
     * Monitoring - a **threshold** has been breached
@@ -157,6 +159,10 @@ Don't try and do everything at once.
 
 Take it one step at a time and make small iterative improvements.
 
+???
+
+How are we going to build this into our systems?
+
 ---
 
 ## Concepts
@@ -170,7 +176,7 @@ When implementing, start at the top, work down...
 
 ---
 
-# Lets talk about ....
+# Let's talk about ....
 
 ---
 
@@ -188,6 +194,8 @@ WHERE
 
 WHY
 
+Context
+
 Understand why failures are occurring in a system
 
 ---
@@ -200,7 +208,7 @@ There are two parts: a 'log' and an 'entry' in the log
     * a set of events or activities that have occurred over time
 
 * The log entry:
-    * Is when something occured
+    * Is when something occurred
     * Data about the event
     * Often includes a ‘severity level'
 
@@ -226,7 +234,7 @@ Answers: What was accessed, when, who, and provides context
 
 Gather detailed information about:
 
-* WHEN an event occured
+* WHEN an event occurred
 * WHAT happened when the event occurred (context)
 * WHERE it happened
 
@@ -256,7 +264,7 @@ Should not expect logging to provide these things
 
 * Fatal - When process has crashed (Full client, NodeJs)
 
-* Error - Significant error has occured. Keep an eye on these.
+* Error - Significant error has occurred. Keep an eye on these.
 
 * Warning - Shouldn't occur, but not sure how to handle (Try/Catch)
 
@@ -363,24 +371,15 @@ I'll provide some guidelines on where to start
 
 ---
 
-# Attributes of Metrics vs Logs
-
-Metrics are:
-
-* Small - in data size, compared to logs
-* Viewed in Aggregate - single log can be valuable, single metric is worthless
-* Structure - simpler, more concise, more structured than a log
-
----
-
 # Purpose
 
-Sets of metrics allow you to:
+Metrics allow you to:
 
 * Help identify problem areas
 * Give high level overview of 'what the system is doing’ (but not why)
 
 ---
+
 
 # Types of Metrics
 
@@ -406,6 +405,16 @@ api_http_requests_total{method="POST", url="/messages”} count=50
 ```
 
 (Contrast this with logging: this is small and compact data)
+
+---
+
+# Attributes of Metrics vs Logs
+
+Metrics are:
+
+* Small - in data size, compared to logs
+* Viewed in Aggregate - single log can be valuable, single metric is worthless
+* Structure - simpler, more concise, more structured than a log
 
 ---
 
@@ -452,127 +461,238 @@ What to measure in your system?
 
 ---
 
-# Use case #1:
-
-When someone says a service is ‘slow’ you should define what that means:
-
-> Is 10s slow? Is 5s slow? 
-
-And if you ‘fix’ it, how do you know its fixed and doesn't degrade later?
-
-
----
-
 # Metrics Technologies
 
-* Prometheus - Great documentation on what to think about when talking about metrics, ex-Googler open source project (prometheus.io)
+* Prometheus - Great documentation on what to think about when talking about metrics
 * Splunk - Create metrics/reports off logs, but missing critical pieces (response time)
 * Application Insights - Great at easily getting basic metrics from web servers (requests per minute, response time, etc)
 
 ---
 
-## Monitoring/Alerting
+# Next
 
-Monitoring is:
+Monitoring and Alerting
 
-* The process of aggregating and querying metrics in a centralized location
-* visualizing - make them human readable, easily consumable
+A bit faster...
 
+---
 
-Once you have metrics generated, you need to aggregate and visualize them, and alert when they go out of bounds
+# Monitoring Generally
 
+* Consumes metrics
+* Provides query capabilities
+* Notifies of threshold breaches
 
-Monitoring vs Alerting - Short term, get something working. Longer term, think Separation of Concerns.
+???
 
+What Monitoring generally does...
 
--charts
+---
 
+# Monitoring Engines
 
+What real world Monitoring engines provide
 
-Monitoring Technologies
-* Splunk Queries + Alerts - Can alert when Errors increase significantly, but can’t alert on latency
-* AppInsights Alerts - Can create alerts on particular data points, may not be fine grained enough
+* Ingestion - consume
+* Storage - persistence
+* Querying - retrieve aggregated data sets
+* Visualization - easily consume data with tables and charts
+* Setting thresholds - notify of 'breaches'
 
+---
+
+# Ingestion: Push vs Pull
+
+* Push - Client pushes(sends) metrics to monitoring service
+* Pull - Monitoring service pulls(requests) metrics from client
+
+*See Prometheus documentation for pros/cons
+
+???
+
+Push
+* Each metric generated is pushed (usually over UDP)
+* Don't know if server is 'down' or 
+* Less scalable
+* Client knows about server
+
+Pull
+* Pulls every x seconds
+* Knows when server is unavailable
+* More scalable
+* Server knows about all clients
+
+---
+
+# Storage and Query Engine
+
+* Metrics have to be stored somewhere
+* Need querying capabilities
+* Time series database
+
+---
+
+# Query and Visualization
+
+* AdHoc queries
+* Reports
+* Historical
+
+---
+
+# Rules / Thresholds / Conditions
+
+Run query. Has a condition been met? If so, send alert?
+
+Requires constant querying of logs.
+
+???
+
+All the same: (Rules / Thresholds / Conditions)
+
+---
+
+# Monitor Symptoms Not Causes
+
+Monitor the response time of a service, not the reason it might be slow. 
+
+Don't monitor SQL query response time, rather monitor request response time.
+
+---
+
+# Monitoring Technologies
+
+* Splunk: Queries + Alerts
+    * Good when data is in logs
+    * Can alert when Errors increase significantly
+    * Can’t alert on latency
+* AppInsights
+    * Can set some thresholds
+    * Create alerts on particular data points
+    * Querying and rules are lacking - not enough control
+
+---
 
 # Alerting
 
 Alerting is:
-* Notifies dev or ops of system issues
-* (Optional) Notify on-call staff first
 
-Make sure Alerts aren’t too noisy… otherwise you’ll tire of them and stop paying attention
+* Notification of Ops, Dev, or On-Call staff, when system has issues
+* Alert generated when conditions are met
+* Not every threshold breach generates an Alert
 
+---
 
+# Difference between Monitoring and Alerting
 
+Alerting is to UI as Monitoring is to Backend
 
-Alerting Technologies
-* OnCall tools (PagerDuty, VictorOps)- Are used specifically to notify ‘on-call’ staff to issues
+Separate the 'generation of events' from 'sending of alerts'
+
+Alerting system should control the flow of alerts to reciever
+
+---
+
+# Alerting Essentials
+
+* Limit Noise
+* Alerts are Actionable
+* Responder recieves only 1-2 alerts per shift
+
+---
+
+# Limit Noise
+
+Think: The Boy Who Cried Wolf
+
+Alerts shouldn't be too noisy... otherwise they’ll be ignored.
+
+???
+
+In a backend service, don't put a 1 second response time threshold, if user wont notice
+
+Tech looks at it ... "Its fine, its not an issue"
+
+---
+
+# Alerts Must Be Actionable
+
+If you cant do anything about it, dont wake someone up.
+
+???
+
+Telematics Alerted at 15 sec threshold. Was valid issue, but nothing could be done.
+
+---
+
+# Limit Alerts Sent During Shift
+
+If there are too many alerts, responder will get:
+
+* burnt out
+* not find root cause/fix underling issue
+
+???
+
+Shouldn't just put on bandaid... create real fix.
+
+---
+
+# Alerting Technologies
+* OnCall tools (PagerDuty, VictorOps) - Notify ‘on-call’ staff to issues
 * Splunk Queries + Alerts - Will send notifications to email, Slack
 * AppInsights Alerts - Only sends email alerts
 
-### What to Monitor
+---
 
-Monitor ‘symptoms’ not causes:
-* Monitor the response time of a service, not the reason it might be slow. 
-    * You may want to track dependancies(AppInsights does) because SQL Databases can be difficult to monitor
+# Review
 
+We want to:
 
+* Identify - Proactively identify outages and issues
+* Prevent - Limit/eliminate impact of issues
+* Improve - Increase the resilience and robustness of systems
 
+???
 
+At the beginning of the talk...
 
+You now have some concpets to start with
 
+---
 
+# Where Do We Start
 
+* Start Simple: Logging / Alerting on Errors
 
+* Use failure to make small incremental change
 
+* Make change immediately after failure
 
-## Show Telematics Archetecture
+???
 
-Where is monitoring
-Where is logging
-Where is Alerting
+Don't do everything at once
 
+---
 
-# Logging, Monitoring Alerting in Splunk
+## Telematics Architecture
 
+Where is Monitoring, Logging and Alerting?
 
-Splunk Logs
-Splunk Monitoring
-Splunk Alerts
+* Event System Logging
+* Core System Metrics and Logging
 
-# Metrics, Monitoring and Alerts in Application Insights
+## Logging, Monitoring Alerting in Splunk
 
-Application Insights
-* Realtime Monitoring
+* Logs
+* Alerts
+* Dashboards
+
+## Metrics, Monitoring and Alerts in Application Insights
+
+* Real-time Monitoring
 * Analytics
-* Monitoring and Alerting
 
+---
 
-
-
-
-
-
-
-
-## What do we start?
-
-* Logging
-
-Then what do we do next? What does each thing allow us to do?
-
-
-
-Track systems you don’t own/don’t have control over. 
-
-You should know when the systems aren’t working as expected, and can understand why they aren’t working. 
-Important: You don’t need to automate ‘fixing’ issues. This can actually backfire. Read book to understand why. (Even Google doesn’t do automatic failovers)
-
-                              Events      -> 
-IMS, POS -> Vehicle Service -> Telematics -> DB
-                             Motion       ->                   -> Lookup Service
-
-Advantages to having Monitoring:
-Nice to haves: Push to prod and track during deployments
-
-
+# Done
