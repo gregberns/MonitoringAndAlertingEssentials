@@ -4,7 +4,7 @@
 
 # Overview
 
-Will discuss   Logging, Metrics, Monitoring, and Alerting
+Will discuss Logging, Metrics, Monitoring, and Alerting
 
 * Why you should care
 * Help understand the fundamentals
