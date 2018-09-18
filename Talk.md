@@ -55,6 +55,7 @@ Plenty of literature - not all is helpful
 Where's the value in metrics?
 
 ---
+class: center, middle
 
 # Story
 
@@ -63,14 +64,7 @@ Where's the value in metrics?
 "The X site isn’t responding!!!"
 
 ---
-
-My first question is: 
-
-Why didn’t you know there was an issue in the first place?
-
-In any case...
-
----
+class: center, middle
 
 So, you spend a couple minutes in utter disbelief making excuses: 
 
@@ -81,22 +75,25 @@ So, you spend a couple minutes in utter disbelief making excuses:
 ![Works fine for me](https://cdn.meme.am/cache/instances/folder332/72583332.jpg)
 
 ---
+class: center, middle
 
 Try to find the issue by digging through logs...
 
 ![Dog Digging](https://miloblog.s3.amazonaws.com/2016/Jun/Digging-1465401349389.jpg)
 
 ---
+class: center, middle
 
 Finally, make a recommendation on the 'cause'
 
 ![Its not my fault](http://rebootauthentic.com/wp-content/uploads/2013/10/responsibility.png)
 
 ---
+class: center, middle
 
-Lets prevent this. 
+**Lets prevent this.**
 
-Lets use good engineering practices.
+**Lets use good engineering practices.**
 
 ---
 
@@ -252,6 +249,31 @@ Should not expect logging to provide these things
 
 ---
 
+# Splunk Log Message Example
+
+```
+{
+  "id": "0",
+  "severity": "Information",
+  "data": [
+    {
+      "Source": "Telematics.Jobs.BuzzerJobProxy",
+      "Timestamp": "2017-07-19T21:52:32.2617467Z",
+      "CorrelationId": "e0a4cff0-46ea-41a4-8a4c-24a2032a3614",
+      "Message": "Recieved Event",
+      "Payload": {
+        "Command": "MaxSpeedSet",
+        "DeviceKey": "971916dd-1bd5-4369-a92b-aea71b20116a",
+        "Vin": "3FA6P0H94ER360202"
+      }
+    }
+  ]
+}
+
+```
+
+---
+
 # Log Levels:
 
 * Fatal
@@ -277,9 +299,8 @@ Should not expect logging to provide these things
 # Usage
 
 * During development we mainly use: Information, Warnings and Errors
-* Once operational, maybe only log Warnings
 * Debugging Prod, use Trace - understand why the errors are occurring
-* In high volume system, only capture Errors. 
+* Once operational or in high volume system, only capture Warning, Error, Fatal. 
 
 ---
 
@@ -297,10 +318,14 @@ Should not expect logging to provide these things
 # Production Issues to Consider
 
 * Availability - What happens when log service is unavailable?
+* If logging system slow, all systems using is could be compromised
 * Performance Impact - heavy logging impacts disk and/or network
-* Be cautious of hand rolled HTTP solutions: if remote site is unavailable, the connection timeout can cause a PROD system to grind to a halt. (I’ve seen it, twice, on the same system.)
-* Industry convention says: "Do not build your own logging library", there are many very good frameworks. They've found all the edge cases and failure paths (See StackOverflow)
-* Logging system goes down - For example, pushing all logs to a database could overwhelm a database and so overall performance of the system (or other systems using that logging database could be degraded).
+
+### Don't DIY
+
+* Industry convention says: "Do not build your own logging library" (See StackOverflow)
+* Be cautious of hand rolled solutions - ex. Http: if remote site is unavailable, a connection timeout will cause a PROD system to grind to a halt. (I’ve seen it, twice, on the same system.)
+
 
 ---
 
@@ -315,29 +340,6 @@ Should not expect logging to provide these things
 
 ---
 
-# Splunk Log Message Example
-
-```
-{
-  "id": "0",
-  "severity": "Information",
-  "data": [
-    {
-      "Source": "Telematics.Jobs.BuzzerJobProxy",
-      "Timestamp": "2017-07-19T21:52:32.2617467Z",
-      "CorrelationId": "e0a4cff0-46ea-41a4-8a4c-24a2032a3614",
-      "Message": "Recieved Event",
-      "Payload": {
-        "Command": "MaxSpeedSet",
-        "DeviceKey": "971916dd-1bd5-4369-a92b-aea71b20116a",
-        "Vin": "3FA6P0H94ER360202"
-      }
-    }
-  ]
-}
-```
-
----
 
 # Summary
 
@@ -421,7 +423,7 @@ Metrics are:
 # Objectives of Metrics
 
 * Pros
-    * Light weight - very little metadata included
+    * Lightweight - very little metadata included
     * Shows 'higher level view' of system
 * Cons
     * Not good for debugging - No detailed cause of issues
@@ -429,7 +431,7 @@ Metrics are:
 
 Note:
 
-* You CAN get metrics from logs, but remember: Separation of Concerns.
+* You CAN get some metrics from logs, but remember: Separation of Concerns.
 
 * Lots of logs prevent scaling up. But metrics just mean a larger ‘int’ value, which is very scalable.
 
@@ -439,7 +441,8 @@ Note:
 
 If you can only measure four metrics of your user-facing system, focus on these four:
 
-* Latency - The time it takes to service a request. A slow error is even worse than a fast error! Therefore, it’s important to track error latency, as opposed to just filtering out errors.
+* Latency - The time it takes to service a request. 
+    * A slow error is even worse than a fast error! Therefore, it’s important to track error latency, as opposed to just filtering out errors.
 * Traffic - A measure of how much demand is being placed on your system.
 * Errors - The rate of requests that fail
 * Saturation - How "full" your service is. Saturation helps predict impending issues.
@@ -465,7 +468,7 @@ What to measure in your system?
 
 * Prometheus - Great documentation on what to think about when talking about metrics
 * Splunk - Create metrics/reports off logs, but missing critical pieces (response time)
-* Application Insights - Great at easily getting basic metrics from web servers (requests per minute, response time, etc)
+* Application Insights - Great for metrics, easy setup (requests per minute, response time, etc)
 
 ---
 
@@ -542,13 +545,25 @@ Pull
 
 # Rules / Thresholds / Conditions
 
+### Purpose
+
+Help identify when problems occur.
+
+### How they work
+
 Run query. Has a condition been met? If so, send alert?
 
-Requires constant querying of logs.
+Requires constant querying of logs
+
+These Enable Alerting
 
 ???
 
 All the same: (Rules / Thresholds / Conditions)
+
+This may be the most important part of monitoring: checking thresholds
+
+Enables Alerting
 
 ---
 
